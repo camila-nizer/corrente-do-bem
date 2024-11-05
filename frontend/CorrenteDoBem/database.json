@@ -1,0 +1,55 @@
+{
+  "ongs": [
+    {
+      "nome": "Hemosc",
+      "cnpj": "12.345.678/0001-90",
+      "ramo": [
+        "Saúde"
+      ]
+    },
+    {
+      "nome": "APAE",
+      "cnpj": "98.765.432/0001-01",
+      "ramo": [
+        "Educação",
+        "Saúde"
+      ]
+    }
+  ],
+  "users": {
+    "data" : [
+        {
+            "nome": "Administrador",
+            "cnpj": "68.034.742/0001-71",
+            "ramo":[],
+            "email": "admin@gmail.com",
+            "senha": "123456",
+            "tipo": "Admin"
+          },
+          {
+            "nome": "Hemosc",
+            "cnpj": "12.345.678/0001-90",
+            "ramo": [
+              "Saúde"
+            ],
+            "email": "hemosc@gmail.com",
+            "senha": "123456",
+            "tipo": "ONG"
+          },
+          {
+            "nome": "APAE",
+            "cnpj": "98.765.432/0001-01",
+            "ramo": [
+              "Educação",
+              "Saúde"
+            ],
+            "email": "apae@gmail.com",
+            "senha": "123456",
+            "tipo": "ONG"
+          }
+
+    ]
+  }
+    
+
+}
