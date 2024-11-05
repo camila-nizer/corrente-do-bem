@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
       fontStyle: 'italic',      
     },
     questionView:{
-      marginTop: height / 3 + 20,
+      marginTop: height / 3,
     },
     questionContainer: {
       marginBottom: 30,
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
       borderColor: 'gray',
       padding: 10,
       alignItems: 'justify',
+      width:width-20,
       minHeight: 50,
-      minWidth: 420, 
+      // minWidth: 420, 
       borderRadius: 15,
       backgroundColor: '#91A261',  
     },
