@@ -2,8 +2,6 @@ package models
 
 import (
 	"github.com/google/uuid"
-
-	"gorm.io/gorm"
 )
 
 // TODO: User in Identity Service (Keycloak)
@@ -12,11 +10,21 @@ import (
 // https://github.com/XenitAB/go-oidc-middleware
 
 // User struct defines the user
-type UserModel struct {
-	gorm.Model
-	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
-	FirstName string    `gorm:"not null"`
-	LastName  string    `gorm:"not null"`
-	Email     string    `gorm:"unique;not null"`
-	Password  string    `gorm:"not null"`
+
+type User struct {
+	ID       uuid.UUID    `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Name     string       `gorm:"not null"`
+	Email    string       `gorm:"unique;not null"`
+	CNPJ     string       `gorm:"not null"`
+	UserType UserTypeEnum `gorm:"not null"`
+	Password string       `gorm:"not null"`
+	Industry []string     `gorm:"type:jsonb"`
+	Statuses []UserStatus `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
+
+type UserTypeEnum string
+
+const (
+	UserAdmin UserTypeEnum = "Admin"
+	UserOng   UserTypeEnum = "ONG"
+)

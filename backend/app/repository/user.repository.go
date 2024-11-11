@@ -3,6 +3,7 @@ package repository
 import (
 	"carona-solidaria/app/entity"
 	"carona-solidaria/app/interfaces"
+	"carona-solidaria/utils"
 	"errors"
 	"strings"
 
@@ -14,18 +15,14 @@ type userRepository struct {
 	db *gorm.DB
 }
 
-var (
-	ErrEmailAlreadyExists = errors.New("email already exists")
-)
-
 func NewUserRepository(db *gorm.DB) interfaces.UserRepository {
 	return &userRepository{db}
 }
 
-func (u *userRepository) Create(user *entity.User, status *entity.UserStatus) (*entity.User, error) {
+func (u *userRepository) Create(user *entity.User) (*entity.User, error) {
 	_, err := u.FindUserByEmail(strings.ToLower(user.Email))
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, ErrEmailAlreadyExists
+		return nil, utils.ErrEmailAlreadyExists
 	}
 	tx := u.db.Begin()
 	if tx.Error != nil {
@@ -35,10 +32,10 @@ func (u *userRepository) Create(user *entity.User, status *entity.UserStatus) (*
 		tx.Rollback()
 		return nil, err
 	}
-	if err := tx.Create(&status).Error; err != nil {
-		tx.Rollback()
-		return nil, err
-	}
+	// if err := tx.Create(&status).Error; err != nil {
+	// 	tx.Rollback()
+	// 	return nil, err
+	// }
 	if err := tx.Commit().Error; err != nil {
 		return nil, err
 	}
@@ -48,7 +45,7 @@ func (u *userRepository) Create(user *entity.User, status *entity.UserStatus) (*
 // FindUser searches the user's table with the condition given
 func (u *userRepository) FindUserByID(id uuid.UUID) (*entity.User, error) {
 	var user entity.User
-	err := u.db.Preload("Status", func(db *gorm.DB) *gorm.DB {
+	err := u.db.Preload("Statuses", func(db *gorm.DB) *gorm.DB {
 		return db.Order("user_statuses.created_at ASC")
 	}).First(&user, "id = ?", id).Error
 	if err != nil {
@@ -61,9 +58,9 @@ func (u *userRepository) FindUserByID(id uuid.UUID) (*entity.User, error) {
 // FindUserByEmail searches the user's table with the email given
 func (u *userRepository) FindUserByEmail(email string) (*entity.User, error) {
 	var user entity.User
-	err := u.db.Preload("Status", func(db *gorm.DB) *gorm.DB {
+	err := u.db.Preload("Statuses", func(db *gorm.DB) *gorm.DB {
 		return db.Order("user_statuses.created_at ASC")
-	}).First(&user, "id = ?", "LOWER(email) = LOWER(?)", email).Error //olhar se a letra minuscula funciona
+	}).First(&user, gorm.Expr("LOWER(email) = LOWER(?)", email)).Error //olhar se a letra minuscula funciona
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +77,8 @@ func (u *userRepository) FindActiveUsers() ([]*entity.User, error) {
 	}
 	for _, user := range users {
 		//if len(user.Status) == 0 it does not generate panic
-		if len(user.Status) >= 1 && user.Status != nil {
-			lastStatus := user.Status[len(user.Status)-1].Status
+		if len(user.Statuses) >= 1 && user.Statuses != nil {
+			lastStatus := user.Statuses[len(user.Statuses)-1].Status
 			if lastStatus != entity.UserStatusEnum("suspended") && lastStatus != entity.UserStatusEnum("deleted") {
 				response = append(response, user)
 				break
@@ -94,7 +91,7 @@ func (u *userRepository) FindActiveUsers() ([]*entity.User, error) {
 // FindAllUsers searches all the user's
 func (u *userRepository) FindAllUsers() ([]*entity.User, error) {
 	var users []*entity.User
-	err := u.db.Preload("Status", func(db *gorm.DB) *gorm.DB {
+	err := u.db.Preload("Statuses", func(db *gorm.DB) *gorm.DB {
 		return db.Order("user_statuses.created_at ASC")
 	}).Error //olhar se a letra minuscula funciona
 	if err != nil {
@@ -112,8 +109,8 @@ func (u *userRepository) FindUsersByLastStatus(status string) ([]*entity.User, e
 	}
 	for _, user := range users {
 		//if len(user.Status) == 0 it does not generate panic
-		if len(user.Status) >= 1 && user.Status != nil {
-			lastStatus := user.Status[len(user.Status)-1].Status
+		if len(user.Statuses) >= 1 && user.Statuses != nil {
+			lastStatus := user.Statuses[len(user.Statuses)-1].Status
 			if lastStatus == entity.UserStatusEnum("deleted") {
 				response = append(response, user)
 				break
@@ -132,7 +129,7 @@ func (u *userRepository) UpdateUser(id uuid.UUID, updates interface{}) error {
 
 // func (r *CampaignsRepository) FindActive() ([]*entity.Campaigns, error) {
 // 	var campaign, response []*entity.Campaign
-// 	err := r.db.Preload("Status", func(db *gorm.DB) *gorm.DB {
+// 	err := r.db.Preload("Statuses", func(db *gorm.DB) *gorm.DB {
 // 		return db.Order("campaign_statuses.created_at ASC")
 // 	}).Preload("Options").Find(&campaigns).Error
 // 	if err != nil {

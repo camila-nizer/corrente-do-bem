@@ -1,12 +1,15 @@
 package entity
 
 import (
-	"errors"
+	"carona-solidaria/app/types"
+	"carona-solidaria/utils"
+	"carona-solidaria/utils/password"
+	"encoding/json"
+	"regexp"
 	"time"
 
 	"github.com/google/uuid"
-
-	"gorm.io/gorm"
+	"gorm.io/datatypes"
 )
 
 // extracting token from HTTP requests.
@@ -14,31 +17,6 @@ import (
 // https://github.com/XenitAB/go-oidc-middleware
 
 // User struct defines the user
-type User struct {
-	gorm.Model
-	ID       uuid.UUID    `gorm:"type:uuid;default:uuid_generate_v4()"`
-	Name     string       `gorm:"not null"`
-	CNPJ     string       `gorm:"not null"`
-	Email    string       `gorm:"unique;not null"`
-	Industry []string     `gorm:"not null"`
-	Usertype UserTypeEnum `gorm:"not null"`
-	Password string       `gorm:"not null"`
-	Status   []UserStatus `gorm:"not null"`
-}
-
-var (
-	errStatusDraft = errors.New("create/delete/update draft status is not allowed")
-)
-
-type UserStatusEnum string
-
-const (
-	UserDraft     UserStatusEnum = "draft"
-	UserPending   UserStatusEnum = "pending"
-	UserActivated UserStatusEnum = "active"
-	UserSuspended UserStatusEnum = "suspended"
-	UserDeleted   UserStatusEnum = "deleted"
-)
 
 type UserTypeEnum string
 
@@ -47,9 +25,65 @@ const (
 	UserOng   UserTypeEnum = "ONG"
 )
 
-type UserStatus struct {
-	ID        uuid.UUID
-	UserID    uuid.UUID
-	Status    UserStatusEnum
-	CreatedAt time.Time
+type User struct {
+	ID       uuid.UUID
+	Name     string
+	Email    string
+	CNPJ     string
+	UserType UserTypeEnum
+	Password string
+	Industry datatypes.JSON `gorm:"type:jsonb"`
+	Statuses []UserStatus
+}
+
+// New cria uma nova instância de UserModel a partir de um UserDTO
+func (User) New(dto types.CreateUserDTO) (*User, error) {
+
+	hash, err := password.Generate(dto.Password)
+
+	if err != nil {
+		return nil, utils.ErrHashPassword
+	}
+
+	if !isValidCNPJ(dto.CNPJ) {
+		return nil, utils.ErrInvalidCNPJ
+	}
+
+	if len(dto.Industry) < 1 {
+		return nil, utils.ErrEmptyIndustry
+	}
+
+	UT := UserTypeEnum(dto.Usertype)
+
+	if UT != UserAdmin && UT != UserOng {
+		return nil, utils.ErrInvalidUserType
+	}
+	industry, err := json.Marshal(dto.Industry)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &User{
+		ID:       uuid.New(), // Gera um novo UUID para o ID do usuário
+		Name:     dto.Name,
+		Email:    dto.Email,
+		CNPJ:     dto.CNPJ,
+		UserType: UT,
+		Password: hash, // Hash da senha
+		Industry: industry,
+	}
+	statusDraft := &UserStatus{
+		ID:        uuid.New(),
+		UserID:    user.ID,
+		Status:    UserDraft,
+		CreatedAt: time.Now(),
+	}
+	user.Statuses = append(user.Statuses, *statusDraft)
+	return user, nil
+}
+
+func isValidCNPJ(cnpj string) bool {
+	// Define a expressão regular para o CNPJ
+	re := regexp.MustCompile(`^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$`)
+	return re.MatchString(cnpj)
 }

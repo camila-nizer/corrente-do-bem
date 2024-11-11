@@ -5,8 +5,8 @@ import (
 	"carona-solidaria/app/interfaces"
 	"carona-solidaria/app/types"
 	"carona-solidaria/utils/password"
+	"encoding/json"
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -22,26 +22,32 @@ func NewUserServices(repo interfaces.UserRepository) interfaces.UserServices {
 
 func (u *userServices) Create(b *types.CreateUserDTO) (*entity.User, error) {
 
-	hash, err := password.Generate(b.Password)
-	if err != nil {
-		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to create a password Hash")
-	}
+	// hash, err := password.Generate(b.Password)
+	// if err != nil {
+	// 	return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to create a password Hash")
+	// }
 
-	draftUser := &entity.User{
-		Name:     b.Name,
-		CNPJ:     b.CNPJ,
-		Industry: b.Industry,
-		Usertype: entity.UserTypeEnum(b.Usertype),
-		Email:    strings.ToLower(b.Email),
-		Password: hash,
-	}
-	status := &entity.UserStatus{
-		Status:    entity.UserDraft,
-		CreatedAt: time.Now(),
+	// industry, err := json.Marshal(b.Industry)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// draftUser := &entity.User{
+	// 	Name:     b.Name,
+	// 	CNPJ:     b.CNPJ,
+	// 	Industry: industry,
+	// 	UserType: entity.UserTypeEnum(b.Usertype),
+	// 	Email:    strings.ToLower(b.Email),
+	// 	Password: hash,
+	// }
+
+	draftUser, err := entity.User{}.New(*b)
+	if err != nil {
+		return nil, err
 	}
 
 	// Create a user, if error return
-	user, err := u.repo.Create(draftUser, status)
+	user, err := u.repo.Create(draftUser)
 	if err != nil {
 		return nil, fiber.NewError(fiber.StatusConflict, err.Error())
 	}
@@ -61,12 +67,16 @@ func (u *userServices) UpdateUser(b *types.UpdateUserDTO) (*entity.User, error) 
 	if err != nil {
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to create a password Hash")
 	}
+	industry, err := json.Marshal(b.Industry)
+	if err != nil {
+		return nil, err
+	}
 	//TODO FAZER A LÓGICA PARA ENVIAR APENAS O QUE FOI EDITADO
 	draftUser := &entity.User{
 		Name:     b.Name,
 		CNPJ:     b.CNPJ,
-		Industry: b.Industry,
-		Usertype: entity.UserTypeEnum(b.Usertype),
+		Industry: industry,
+		UserType: entity.UserTypeEnum(b.Usertype),
 		Email:    strings.ToLower(b.Email),
 		Password: hash,
 	}

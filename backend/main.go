@@ -2,6 +2,7 @@ package main
 
 import (
 	"carona-solidaria/app/models"
+	"carona-solidaria/app/routes"
 	"carona-solidaria/app/types"
 	"carona-solidaria/config/database"
 	"fmt"
@@ -18,7 +19,8 @@ const (
 func main() {
 	database.Connect()
 	database.Migrate(
-		&models.UserModel{},
+		&models.User{},
+		&models.UserStatus{},
 	)
 	//TODO: configurar errs.handler
 	// app := fiber.New(fiber.Config{
@@ -49,12 +51,10 @@ func main() {
 		c.Set("Z--APIVersion", "v1")
 		return c.Next()
 	})
-	fmt.Println(v1)
 
-	// routes.AuthRoutes(v1)
+	routes.AuthRoutes(v1)
 	// routes.CampaingsRoutes(v1)
 
 	app.Listen(fmt.Sprintf(":%v", "3000"))
 
-	fmt.Println("Hello, World!")
 }

@@ -7,6 +7,7 @@ import (
 	"carona-solidaria/utils"
 	"carona-solidaria/utils/jwt"
 	"carona-solidaria/utils/password"
+	"encoding/json"
 	"errors"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,29 +15,47 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	ErrEmptyIndustry = errors.New("Você precisa ter ao menos uma industria selecionada.")
-)
-
 func GenerateToken(user *entity.User) (*types.AuthResponse, error) {
+
+	var industry []string
+	err := json.Unmarshal(user.Industry, &industry)
+	if err != nil {
+		return nil, err
+	}
+
 	// generate access token
 	token, err := jwt.Generate(&types.TokenPayload{
 		ID:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
 		CNPJ:     user.CNPJ,
-		Industry: user.Industry,
-		Usertype: string(user.Usertype),
+		Industry: industry,
+		Usertype: string(user.UserType),
 	})
 	if err != nil {
 		return nil, err
 	}
+	var statusesResp []types.UserStatusResponse
+	for _, status := range user.Statuses {
+		resp := &types.UserStatusResponse{
+			ID:        status.ID,
+			UserID:    status.UserID,
+			Status:    string(status.Status),
+			CreatedAt: status.CreatedAt,
+		}
+		statusesResp = append(statusesResp, *resp)
+
+	}
 
 	response := &types.AuthResponse{
 		User: &types.UserResponse{
-			ID:    user.ID,
-			Name:  user.Name,
-			Email: user.Email,
+			ID:         user.ID,
+			Name:       user.Name,
+			Email:      user.Email,
+			CNPJ:       user.CNPJ,
+			Industry:   industry,
+			Usertype:   string(user.UserType),
+			UserStatus: statusesResp,
 		},
 		Auth: &types.AccessResponse{
 			Token: token,
@@ -45,9 +64,14 @@ func GenerateToken(user *entity.User) (*types.AuthResponse, error) {
 	return response, nil
 }
 
-func CreateUserResponse(user *entity.User) *types.UserResponse {
+func CreateUserResponse(user *entity.User) (*types.UserResponse, error) {
 	userStatus := []types.UserStatusResponse{}
-	for _, status := range user.Status {
+	var industry []string
+	err := json.Unmarshal(user.Industry, &industry)
+	if err != nil {
+		return nil, err
+	}
+	for _, status := range user.Statuses {
 		status := types.UserStatusResponse{
 			ID:        status.ID,
 			UserID:    status.UserID,
@@ -60,11 +84,11 @@ func CreateUserResponse(user *entity.User) *types.UserResponse {
 		ID:         user.ID,
 		Name:       user.Name,
 		CNPJ:       user.CNPJ,
-		Usertype:   string(user.Usertype),
-		Industry:   user.Industry,
+		Usertype:   string(user.UserType),
+		Industry:   industry,
 		UserStatus: userStatus,
 	}
-	return resp
+	return resp, nil
 }
 
 // SignupController service creates a user
@@ -76,7 +100,7 @@ func SignupController(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusConflict, err.Error())
 	}
 	if len(b.Industry) < 1 && b.Usertype != "Admin" {
-		return fiber.NewError(fiber.ErrBadGateway.Code, ErrEmptyIndustry.Error())
+		return fiber.NewError(fiber.ErrBadGateway.Code, utils.ErrEmptyIndustry.Error())
 	}
 
 	user, err := services.Create(b)
@@ -99,7 +123,7 @@ func EditUser(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusConflict, err.Error())
 	}
 	if len(b.Industry) < 1 && b.Usertype != "Admin" {
-		return fiber.NewError(fiber.ErrBadGateway.Code, ErrEmptyIndustry.Error())
+		return fiber.NewError(fiber.ErrBadGateway.Code, utils.ErrEmptyIndustry.Error())
 	}
 
 	user, err := services.UpdateUser(b)
@@ -151,7 +175,10 @@ func GetUserInfo(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	userResponse := CreateUserResponse(user)
+	userResponse, err := CreateUserResponse(user)
+	if err != nil {
+		return err
+	}
 
 	return ctx.JSON(userResponse)
 }
@@ -168,7 +195,10 @@ func FindUserByEmail(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	userResponse := CreateUserResponse(user)
+	userResponse, err := CreateUserResponse(user)
+	if err != nil {
+		return err
+	}
 
 	return ctx.JSON(userResponse)
 }
@@ -186,7 +216,10 @@ func FindActiveUsers(ctx *fiber.Ctx) error {
 	usersRespose := []types.UserResponse{}
 	for _, user := range users {
 
-		userResp := CreateUserResponse(user)
+		userResp, err := CreateUserResponse(user)
+		if err != nil {
+			return err
+		}
 		usersRespose = append(usersRespose, *userResp)
 	}
 
@@ -206,7 +239,10 @@ func FindAllUsers(ctx *fiber.Ctx) error {
 	usersRespose := []types.UserResponse{}
 	for _, user := range users {
 
-		userResp := CreateUserResponse(user)
+		userResp, err := CreateUserResponse(user)
+		if err != nil {
+			return err
+		}
 		usersRespose = append(usersRespose, *userResp)
 	}
 

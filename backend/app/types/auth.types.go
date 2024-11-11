@@ -16,9 +16,14 @@ type LoginDTO struct {
 // CreateUserDTO defined the /login payload
 type CreateUserDTO struct {
 	LoginDTO
-	Name     string   `json:"name" validate:"required,min=3"`
-	CNPJ     string   `json:"cnpj" validate:"required"`
-	Industry []string `json:"industry" validate:"required"`
+	Name     string    `json:"name" validate:"required,min=3"`
+	CNPJ     string    `json:"cnpj" validate:"required"`
+	Industry []string  `json:"industry" validate:"required"`
+	Status   StatusDTO `json:"status"`
+}
+
+type StatusDTO struct {
+	status string
 }
 type UpdateUserDTO struct {
 	LoginDTO
@@ -56,11 +61,6 @@ type AccessResponse struct {
 type AuthResponse struct {
 	User *UserResponse   `json:"user"`
 	Auth *AccessResponse `json:"auth"`
-}
-
-type OrganizationsPayload struct {
-	ID   string `gorm:"serializer:json" json:"id,omitempty"`
-	Name string `gorm:"serializer:json" json:"name,omitempty"`
 }
 
 // TokenPayload defines the payload for the token

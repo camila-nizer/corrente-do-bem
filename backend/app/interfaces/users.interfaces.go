@@ -8,7 +8,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(*entity.User, *entity.UserStatus) (*entity.User, error)
+	Create(*entity.User) (*entity.User, error)
 	UpdateUser(uuid.UUID, interface{}) error
 	FindAllUsers() ([]*entity.User, error)
 	FindActiveUsers() ([]*entity.User, error)
