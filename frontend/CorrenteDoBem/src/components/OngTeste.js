@@ -85,7 +85,6 @@ const MultiSelectComponent = ({ onFilterChange }) => {
         search
         searchPlaceholder="Pesquisa por ramo..."
         onChange={item => {
-          console.log('AQUIIIIIIIIIIII ',item);
           setSelected(item);
         }}
         renderRightIcon={() => (

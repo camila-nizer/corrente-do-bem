@@ -5,9 +5,10 @@
       "cnpj": "86.897.113/0001-57",
       "ramo": [
         "Saúde",
-        "Sangue/Plasma/Medula"
+        "Sangue/Plaquetas/Medula"
       ],
-      "endereço":[
+      "email":"hemosc@gmail.com",
+      "endereco":[
         {
           "rua": "Av. Prof. Othon Gama D'Eça",
           "numero":"756",
@@ -21,7 +22,7 @@
       "site":"https://www.hemosc.org.br/",
       "instagram":"https://www.instagram.com/hemoscoficial/",
       "telefone":["(48) 3251-9712","(48) 3242-9758"],
-      "dadosBancários":[
+      "dadosBancarios":[
         {
           "banco":"Banco do Brasil",
           "agencia":"3582-3",
@@ -34,11 +35,12 @@
     {
       "nome": "Cepon",
       "cnpj": "86.897.113/0004-08",
+      "email":"cepon@gmail.com",
       "ramo": [
         "Saúde",
         "Cabelo"
       ],
-      "endereço":[
+      "endereco":[
         {
           "rua": "Av. Prof. Othon Gama D'Eça",
           "numero":"756",
@@ -52,7 +54,7 @@
       "site":"http://www.cepon.org.br/",
       "instagram":"https://www.instagram.com/cepon_oncologia_sc/",
       "telefone":["(48) 3331-1400"],
-      "dadosBancários":[
+      "dadosBancarios":[
         {
           "banco":"Banco do Brasil",
           "agencia":"3582-3",
@@ -65,11 +67,12 @@
     {
       "nome": "APAE",
       "cnpj": "98.765.432/0001-01",
+      "email":"apae@gmail.com",
       "ramo": [
         "Educação",
         "Saúde"
       ],
-      "endereço":[
+      "endereco":[
         {
           "rua": "Av. Manoel Cantalício Vidal",
           "numero":"494",
@@ -83,7 +86,7 @@
       "site":"https://apaepalhoca.org.br/",
       "instagram":"https://www.instagram.com/apaepalhoca/",
       "telefone":["(48) 3242-7855"],
-      "dadosBancários":[
+      "dadosBancarios":[
         {
           "banco":"Banco do Brasil",
           "agencia":"5362-7",
@@ -95,15 +98,19 @@
 
     },
     {
-      "nome": "FMPSC",
+      "nome": "Faculdade Municipal de Palhoça (FMP)",
       "cnpj": "07.933.452/0001-75",
+      "email":"fmpsc@gmail.com",
       "ramo": [
         "Educação",
-        "Roupas/Calçados Adulto",
+        "Saúde",
         "Cabelo",
-        "Roupas/Calçados Infantil"
+        "Alimentos",
+        "Roupas/Calçados Adulto",
+        "Roupas/Calçados Infantil",
+        "Assistência para animais"
       ],
-      "endereço":[
+      "endereco":[
         {
           "rua": "R. João Pereira dos Santos",
           "numero":"99",
@@ -117,7 +124,7 @@
       "site":"http://www.fmpsc.edu.br/",
       "instagram":"https://www.instagram.com/faculdademunicipaldepalhoca/",
       "telefone":["(48) 3220-0376"],
-      "dadosBancários":[]
+      "dadosBancarios":[]
     }
   ],
   "users": {
@@ -135,7 +142,7 @@
             "cnpj": "12.345.678/0001-90",
             "ramo": [
               "Saúde",
-              "Sangue/Plasma/Medula"
+              "Sangue/Plaquetas/Medula"
             ],
             "email": "hemosc@gmail.com",
             "senha": "123456",
@@ -164,11 +171,15 @@
             "tipo": "ONG"
           },
           {
-            "nome": "FMPSC",
+            "nome": "Faculdade Municipal de Palhoça (FMP)",
             "cnpj": "86.897.113/0004-08",
             "ramo": [
               "Saúde",
-              "Cabelo"
+              "Cabelo",
+              "Alimentos",
+              "Roupas/Calçados Adulto",
+              "Roupas/Calçados Infantil",
+              "Assistência para animais"
             ],
             "email": "fmpsc@gmail.com",
             "senha": "123456",
