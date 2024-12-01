@@ -55,6 +55,6 @@ func main() {
 	routes.AuthRoutes(v1)
 	// routes.CampaingsRoutes(v1)
 
-	app.Listen(fmt.Sprintf(":%v", "3000"))
+	app.Listen(fmt.Sprintf(":%v", "4000"))
 
 }
