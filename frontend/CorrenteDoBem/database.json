@@ -2,9 +2,64 @@
   "ongs": [
     {
       "nome": "Hemosc",
-      "cnpj": "12.345.678/0001-90",
+      "cnpj": "86.897.113/0001-57",
       "ramo": [
-        "Saúde"
+        "Saúde",
+        "Sangue/Plasma/Medula"
+      ],
+      "endereço":[
+        {
+          "rua": "Av. Prof. Othon Gama D'Eça",
+          "numero":"756",
+          "bairro":"Centro",
+          "cidade":"Florianópolis",
+          "estado":"SC",
+          "linkMaps":"https://maps.app.goo.gl/bUVMTfkv3aajGvF76"
+        }
+        
+      ],
+      "site":"https://www.hemosc.org.br/",
+      "instagram":"https://www.instagram.com/hemoscoficial/",
+      "telefone":["(48) 3251-9712","(48) 3242-9758"],
+      "dadosBancários":[
+        {
+          "banco":"Banco do Brasil",
+          "agencia":"3582-3",
+          "conta":"6.686-9",
+          "tipodeConta":"corrente",
+          "pix":"86.897.113/0005-80"
+        }
+      ]
+    },
+    {
+      "nome": "Cepon",
+      "cnpj": "86.897.113/0004-08",
+      "ramo": [
+        "Saúde",
+        "Cabelo"
+      ],
+      "endereço":[
+        {
+          "rua": "Av. Prof. Othon Gama D'Eça",
+          "numero":"756",
+          "bairro":"Centro",
+          "cidade":"Florianópolis",
+          "estado":"SC",
+          "linkMaps":"https://maps.app.goo.gl/bUVMTfkv3aajGvF76"
+        }
+        
+      ],
+      "site":"http://www.cepon.org.br/",
+      "instagram":"https://www.instagram.com/cepon_oncologia_sc/",
+      "telefone":["(48) 3331-1400"],
+      "dadosBancários":[
+        {
+          "banco":"Banco do Brasil",
+          "agencia":"3582-3",
+          "conta":"6.685-0",
+          "tipodeConta":"corrente",
+          "pix":"86.897.113/0004-08"
+        }
       ]
     },
     {
@@ -13,7 +68,56 @@
       "ramo": [
         "Educação",
         "Saúde"
+      ],
+      "endereço":[
+        {
+          "rua": "Av. Manoel Cantalício Vidal",
+          "numero":"494",
+          "bairro":"Centro",
+          "cidade":"Palhoça",
+          "estado":"SC",
+          "linkMaps":"https://g.co/kgs/dTvKTqe"
+        }
+        
+      ],
+      "site":"https://apaepalhoca.org.br/",
+      "instagram":"https://www.instagram.com/apaepalhoca/",
+      "telefone":["(48) 3242-7855"],
+      "dadosBancários":[
+        {
+          "banco":"Banco do Brasil",
+          "agencia":"5362-7",
+          "conta":"220404-5",
+          "tipodeConta":"corrente",
+          "pix":"75.398.966/0001-28"
+        }
       ]
+
+    },
+    {
+      "nome": "FMPSC",
+      "cnpj": "07.933.452/0001-75",
+      "ramo": [
+        "Educação",
+        "Roupas/Calçados Adulto",
+        "Cabelo",
+        "Roupas/Calçados Infantil"
+      ],
+      "endereço":[
+        {
+          "rua": "R. João Pereira dos Santos",
+          "numero":"99",
+          "bairro":"Ponte do Imaruim",
+          "cidade":"Palhoça",
+          "estado":"SC",
+          "linkMaps":"https://maps.app.goo.gl/gULtyP5r8q75ePu79"
+        }
+        
+      ],
+      "site":"http://www.fmpsc.edu.br/",
+      "instagram":"https://www.instagram.com/faculdademunicipaldepalhoca/",
+      "telefone":["(48) 3220-0376"],
+      "dadosBancários":[]
     }
   ],
   "users": {
@@ -30,7 +134,8 @@
             "nome": "Hemosc",
             "cnpj": "12.345.678/0001-90",
             "ramo": [
-              "Saúde"
+              "Saúde",
+              "Sangue/Plasma/Medula"
             ],
             "email": "hemosc@gmail.com",
             "senha": "123456",
@@ -46,10 +151,30 @@
             "email": "apae@gmail.com",
             "senha": "123456",
             "tipo": "ONG"
+          },
+          {
+            "nome": "CEPON",
+            "cnpj": "86.897.113/0004-08",
+            "ramo": [
+              "Saúde",
+              "Cabelo"
+            ],
+            "email": "cepon@gmail.com",
+            "senha": "123456",
+            "tipo": "ONG"
+          },
+          {
+            "nome": "FMPSC",
+            "cnpj": "86.897.113/0004-08",
+            "ramo": [
+              "Saúde",
+              "Cabelo"
+            ],
+            "email": "fmpsc@gmail.com",
+            "senha": "123456",
+            "tipo": "ONG"
           }
 
     ]
   }
-    
-
 }
