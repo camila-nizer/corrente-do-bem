@@ -82,8 +82,8 @@ const HomeScreen = () => {
               </View>
               <Carousel
                   loop
-                  // autoPlay
-                  // autoPlayInterval={3000.0}
+                  autoPlay
+                  autoPlayInterval={3000.0}
                   style={{
                     marginTop: (height / 2) - 250.0,
                   }}
