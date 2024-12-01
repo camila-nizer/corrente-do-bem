@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import HelpScreen from '../screens/Pages/Help';
 import LoginScreen from '../screens/Pages/LoginScreen';
 import Login from '../screens/Pages/LoginPage';
+import CreateUserScreen from '../screens/Pages/CreateUserScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -72,6 +73,16 @@ const TabNavigator = () => {
             <Tab.Screen 
                 name="LoginScreen" 
                 component={Login} 
+                options={{
+                    tabBarButton: () => null, // Oculta a aba "Teste"
+                }}
+                // options={{
+                //     tabBarIcon: ({ color }) => <Icon name="heart-sharp" size={30} color={color} />,
+                // }}
+            />
+            <Tab.Screen 
+                name="Register" 
+                component={CreateUserScreen} 
                 options={{
                     tabBarButton: () => null, // Oculta a aba "Teste"
                 }}

@@ -11,6 +11,7 @@ import LoginScreen from '../screens/Pages/LoginScreen';
 import HelpScreen from '../screens/Pages/Help';
 import TabNavigator from './TabNavigator';
 import Login from '../screens/Pages/LoginPage';
+import CreateUserScreen from '../screens/Pages/CreateUserScreen';
 
 
 
@@ -47,7 +48,7 @@ const AppNavigator = () => {
           }}
         >
           <Drawer.Screen 
-              name='Home' 
+              name='Home ' 
               component={TabNavigator} 
               options={{
                 headerTitle: 'Home',
@@ -90,6 +91,13 @@ const AppNavigator = () => {
           />
 
           <Drawer.Screen name= 'Teste' component={Login} options={{
+            drawerIcon: ({ focused }) => (
+              <Icon name="log-out-outline" size={20} color={focused ? '#2c5321' : '#000'} />
+            ),
+            }}
+            style={{ margintop: 100}} 
+          />
+          <Drawer.Screen name= 'Register' component={CreateUserScreen} options={{
             drawerIcon: ({ focused }) => (
               <Icon name="log-out-outline" size={20} color={focused ? '#2c5321' : '#000'} />
             ),

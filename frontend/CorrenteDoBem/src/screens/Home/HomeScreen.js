@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Dimensions, View, Text, Image,StyleSheet } from 'react-native';
+import { Dimensions, View, Text,StyleSheet } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import Animated, { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
+import Animated, { useSharedValue } from "react-native-reanimated";
 import GradientBackground from '../../components/GradientBackground';
 import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../../../assets/doacao_alimentos.jpg';
@@ -82,26 +82,26 @@ const HomeScreen = () => {
               </View>
               <Carousel
                   loop
-                  autoPlay
-                  autoPlayInterval={3000}
+                  // autoPlay
+                  // autoPlayInterval={3000.0}
                   style={{
-                    marginTop: (height / 2) -250,
+                    marginTop: (height / 2) - 250.0,
                   }}
                   mode="parallax"
                   width={width}
                   height={carrouselHeight}
                   data={images}
                   onScroll={event => {
-                  offsetX.value = event.contentOffset.x;
+                    offsetX.value = event.contentOffset.x;
                   }}
                   onSnapToItem={index => setCurrentIndex(index)} // Atualiza o índice atual
                   renderItem={({ item, index }) => {
                      return (
                         <View style={styles.imageContainer}>
-                        <Animated.Image
-                            source={item.image}
-                            style={[styles.image]}
-                        />
+                          <Animated.Image
+                              source={item.image}
+                              style={[styles.image]}
+                          />
                         </View>
                     );
                   }}
@@ -109,7 +109,7 @@ const HomeScreen = () => {
 
               <View style={styles.heartContainer}>
                 {images.map((_, index) => (
-                    <Icon
+                  <Icon
                     key={index}
                     name={currentIndex === index ? 'heart-sharp' : 'heart-sharp'}
                     size={currentIndex === index ? 28 : 20} // Ajusta o tamanho conforme selecionado

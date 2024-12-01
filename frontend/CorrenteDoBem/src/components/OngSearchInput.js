@@ -16,11 +16,11 @@ const OngSearchInput = () => {
             const data = await response.json();
             setOngs(data);
         } catch (error) {
-            console.log('caindo no CATCHHHHH');
             Alert.alert('Erro', 'Não foi possível carregar as ONGs.');
             console.error(error);
         }
     };
+
 
     // Função para filtrar as ONGs com base no termo de busca
     const ongsFilters = (term) => {
@@ -44,18 +44,21 @@ const OngSearchInput = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <Icon name="search" size={30} style={styles.icon} />
+            <View>
+                {/* style={styles.inputContainer}> */}
+                {/* <Icon name="search" size={30} style={styles.icon} /> */}
                 <TextInput
                     style={styles.input}
                     placeholder="Busca por nome"
                     value={searchTerm}
-                    onChangeText={setSearchTerm}
+                    onChangeText={(value)=>{
+                        setSearchTerm(value);
+                    }}
                     // placeholderTextColor={'#0000'}
-                    size={18}
+                    // size={18}
                 />
             </View>
-            <FlatList
+            {/* <FlatList
                 data={filteredOngs}
                 keyExtractor={(item) => item.cnpj} // CNPJ é chave única
                 renderItem={({ item }) => (
@@ -66,7 +69,7 @@ const OngSearchInput = () => {
                 ListEmptyComponent={
                     <Text>Nenhum encontrado</Text>
                 }
-            />
+            /> */}
         </View>
     );
 };
@@ -79,10 +82,13 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: '#lightgray',
+        borderColor: '#000000',
         borderRadius: 4,
         padding: 8,
         marginBottom: 16,
+        // backgroundColor:'red',
+        minHeight:40,
+        marginTop:12,
     },
     icon: {
         marginRight: 8,
