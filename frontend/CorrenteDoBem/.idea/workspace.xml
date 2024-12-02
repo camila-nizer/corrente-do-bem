@@ -6,10 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="2f492674-e938-4765-b656-078345476461" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/OngTeste.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OngTeste.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/OngTesteNome.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OngTesteNome.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Pages/CreateUserScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Pages/CreateUserScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Pages/SearchOngsScreens.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Pages/SearchOngsScreens.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

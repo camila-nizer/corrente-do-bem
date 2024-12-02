@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Toast from 'react-native-toast-message';
 
 
-const DropdownComponent = ({onFilterChange}) => {
+const DropdownComponent = ({onFilterChange, setFilteredOngbyName}) => {
   const [itemSelected, setItemSelected] = useState(null);
   const [data, setData] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
@@ -25,8 +26,18 @@ const DropdownComponent = ({onFilterChange}) => {
         setData(formattedData);
 
     } catch (error) {
-        Alert.alert('Erro', 'Não foi possível carregar as ONGs.');
-        console.error(error);
+      console.log('Erro ao carregar ONGs:', error);
+      setFilteredOngbyName(true);
+      setHaveDataOngByName(false);
+      Toast.show({
+        type: 'error',  // Tipo de toast
+        position: 'bottom',  // Posição do toast
+        text1: 'Erro',  // Título do toast
+        text2: 'Não foi possível carregar as ONGs.',  // Texto do toast
+        visibilityTime: 3000,  // Tempo de visibilidade
+        autoHide: true,  // Auto-hide após o tempo especificado
+        bottomOffset: 40,  // Distância da parte inferior da tela
+      });   
     }
     };
 
@@ -38,6 +49,7 @@ const DropdownComponent = ({onFilterChange}) => {
       if (item?.value === itemSelected?.value) {
         setItemSelected(null);
         onFilterChange(null); // Envia null ao deselecionar
+        setHaveDataOngByName(false);
       } else {
         setItemSelected(item);
         onFilterChange([item]); // Envia o item completo selecionado

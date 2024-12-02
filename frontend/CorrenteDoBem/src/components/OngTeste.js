@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Toast from 'react-native-toast-message';
 
 
-const MultiSelectComponent = ({ onFilterChange }) => {
+const MultiSelectComponent = ({ onFilterChange, setFailFilteredOngsbyRamo, setHaveDataOngsByRamo }) => {
 
   const data = [
     { label: 'Saúde', value: 'Saúde' },
@@ -28,16 +29,31 @@ const MultiSelectComponent = ({ onFilterChange }) => {
             const dataResp = await response.json();
             setOngs(dataResp);
         } catch (error) {
-            console.error('Erro ao carregar ONGs:', error);
+            console.log('Erro ao carregar ONGs:', error);
+            setFailFilteredOngsbyRamo(true);
+            Toast.show({
+              type: 'error',  // Tipo de toast
+              position: 'bottom',  // Posição do toast
+              text1: 'Erro',  // Título do toast
+              text2: 'Não foi possível carregar as ONGs.',  // Texto do toast
+              visibilityTime: 3000,  // Tempo de visibilidade
+              autoHide: true,  // Auto-hide após o tempo especificado
+              bottomOffset: 40,  // Distância da parte inferior da tela
+            });
+
         }
     };
 
     // Função para filtrar ONGs com base nos ramos selecionados
     const filtrarOngs = (selectedRamos) => {
         if (selectedRamos && selectedRamos.length > 0) {
+          setHaveDataOngsByRamo(true);
           const resultados = ongs.filter(ong =>
             selectedRamos.some(ramo => ong.ramo.includes(ramo))
           );
+          if(resultados.length <1){
+            setHaveDataOngsByRamo(false);
+          }
           setFilteredOngs(resultados);
           // Passa os resultados para o componente pai
           if (onFilterChange) {
@@ -45,9 +61,11 @@ const MultiSelectComponent = ({ onFilterChange }) => {
           }
         }else{
           setFilteredOngs([]);
+          setHaveDataOngsByRamo(false);
           // Passa os resultados para o componente pai
           if (onFilterChange) {
             onFilterChange([]);
+            setFailFilteredOngsbyRamo(true);
           }
         }
     };

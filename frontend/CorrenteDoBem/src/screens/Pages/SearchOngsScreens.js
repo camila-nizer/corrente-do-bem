@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList , TouchableOpacity, Modal, Clipboard, Linking, Alert, LogBox, ScrollView} from 'react-native';
 import OngFilterByRamo from '../../components/OngSearchByRamo';
 import OngSearchInput from '../../components/OngSearchInput';
@@ -11,10 +11,22 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const SearchOngsScreen = () => {
   const [filteredOngsbyRamo, setFilteredOngsByRamo] = useState([]);
   const [filteredOngbyName, setFilteredOngByName] = useState([]);
+  const [haveDataOngsbyRamo, setHaveDataOngsByRamo] = useState([]);
+  const [haveDataOngbyName, setHaveDataOngByName] = useState([]);
+  const [failFilteredOngsbyRamo, setFailFilteredOngsbyRamo ] = useState(false);
+  const [failFilteredOngbyName, setFilteredOngbyName ] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [filtersApplied, setFiltersApplied]= useState(false);
 
-  const filtersApplied =
-    filteredOngsbyRamo.length > 0 || filteredOngbyName.length > 0;
+    useEffect(() => {
+    if ((failFilteredOngsbyRamo && failFilteredOngbyName) && (!haveDataOngbyName && !haveDataOngsbyRamo)) {
+      setFiltersApplied(true); // Filtros aplicados
+    } 
+    else{
+      setFiltersApplied(false);
+    }
+    },[filteredOngsbyRamo, filteredOngbyName]);
+
 
   // Desabilita o warning específico
   LogBox.ignoreLogs([
@@ -115,8 +127,16 @@ const SearchOngsScreen = () => {
   return (
     <GradientBackground>
     <View style={styles.container}>
-      <MultiSelectComponent onFilterChange={setFilteredOngsByRamo} />
-      <DropdownComponent onFilterChange={setFilteredOngByName} />
+      <MultiSelectComponent 
+        onFilterChange={setFilteredOngsByRamo} 
+        setFailFilteredOngsbyRamo= {setFailFilteredOngsbyRamo} 
+        setHaveDataOngsByRamo= {setHaveDataOngsByRamo} 
+      />
+      <DropdownComponent 
+        onFilterChange={setFilteredOngByName}
+        setFilteredOngbyName={setFilteredOngbyName}
+        setHaveDataOngByName={setHaveDataOngByName}
+      />
 
 
       {combinedData && combinedData.length > 0 ? (
@@ -139,41 +159,6 @@ const SearchOngsScreen = () => {
           )
         )}
       
-
-      {/* {filteredOngsbyRamo && filteredOngsbyRamo.length > 0 && (
-        <View>
-            <FlatList
-              data={filteredOngsbyRamo}
-              keyExtractor={(item) => item.cnpj}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.dropdownItem}
-                  onPress={() => openModal(item)}
-                >
-                  <Text style={styles.dropdownText}>{item.nome}</Text>
-                </TouchableOpacity>
-              )}
-            />
-        </View>
-      )} */}
-
-      
-      {/* {filteredOngbyName && filteredOngbyName.length > 0 && (
-        <View>
-          <FlatList
-            data={filteredOngbyName}
-            keyExtractor={(item) => item.cnpj}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => openModal(item)}
-              >
-                <Text style={styles.dropdownText}>{item.nome}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )} */}
 
       {/* Modal para exibir detalhes completos */}
       {selectedItem && (

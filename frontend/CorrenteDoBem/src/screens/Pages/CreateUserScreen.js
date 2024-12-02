@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { register } from '../../../src/api/authApi';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 // Validação com yup
 const schema = yup.object().shape({
@@ -66,13 +67,41 @@ const CreateUserScreen = () => {
     try {
       const response = await register(data);
       if (response.status === 200) {
+        Toast.show({
+          type: 'success',  // Tipo: sucesso
+          position: 'top',  // Posição: topo
+          text1: 'Sucesso!',
+          text2: 'Cadastro criado com sucesso! Aguarde análise do administrador (retornaremos via e-mail com os próximos passos)',
+          visibilityTime: 4000,  // Duração do toast
+          autoHide: true,  // Esconde automaticamente
+          topOffset: 40,  // Distância do topo
+        });
+        
         Alert.alert('Cadastro Criado!', 'Cadastro criado com sucesso.', [
           { text: 'OK', onPress: () => navigation.navigate('Login') },
         ]);
       } else {
+        Toast.show({
+          type: 'error',  // Tipo de toast
+          position: 'bottom',  // Posição do toast
+          text1: 'Erro',  // Título do toast
+          text2: 'Ocorreu um erro ao criar a conta. Tente novamente mais tarde',  // Texto do toast
+          visibilityTime: 3000,  // Tempo de visibilidade
+          autoHide: true,  // Auto-hide após o tempo especificado
+          bottomOffset: 40,  // Distância da parte inferior da tela
+        });
         Alert.alert('Erro', 'Ocorreu um erro ao criar a conta.', [{ text: 'OK' }]);
       }
     } catch (err) {
+      Toast.show({
+        type: 'error',  // Tipo de toast
+        position: 'bottom',  // Posição do toast
+        text1: 'Erro',  // Título do toast
+        text2: 'Ocorreu um erro ao criar a conta. Tente novamente mais tarde',  // Texto do toast
+        visibilityTime: 3000,  // Tempo de visibilidade
+        autoHide: true,  // Auto-hide após o tempo especificado
+        bottomOffset: 40,  // Distância da parte inferior da tela
+      });
       Alert.alert('Erro', 'Tente novamente mais tarde.', [{ text: 'OK' }]);
     }
   };
