@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, ActivityIndicator, Alert, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, Button, TextInput, ActivityIndicator, Alert, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Dimensions } from 'react-native';
 import { Dialog, Button as PaperButton, Checkbox, Switch } from 'react-native-paper'; // Importando Dialog e Checkbox
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -7,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { register } from '../../../src/api/authApi';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import GradientBackground from '../../components/GradientBackground'
+
 
 // Validação com yup
 const schema = yup.object().shape({
@@ -23,6 +25,7 @@ const CreateUserScreen = () => {
   const [visible, setVisible] = useState(false); // Controla o estado do Dialog
   const [selectedIndustries, setSelectedIndustries] = useState([]); // Indústrias selecionadas
   const navigation = useNavigation();
+  const { width, height } = Dimensions.get('window');
   const {
     control,
     handleSubmit,
@@ -119,107 +122,126 @@ const CreateUserScreen = () => {
     setNoNumber((prev) => !prev);
     setValue('address.number', !noNumber ? 'S/N' : ''); // Atualiza o valor do campo "número"
   };
+  const altura= height-(height/4); 
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={{ flex: 1 }}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={{ padding: 20 }}>
-          <TextInputField control={control} name="email" placeholder="Email" errors={errors} />
-          <TextInputField control={control} name="password" placeholder="Senha" errors={errors} secureTextEntry />
-          <TextInputField control={control} name="name" placeholder="Nome" errors={errors} />
-          <TextInputField control={control} name="cnpj" placeholder="CNPJ" errors={errors} />
+    <GradientBackground>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1, maxHeight: altura}}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          
+          <ScrollView contentContainerStyle={{ padding: 20 }}>
+            <Text style={{
+              alignItems: 'center',
+              marginBottom: 10,
+              fontSize: 20,
+              textAlign: 'center',
+              color:'#2C5321',
+              fontWeight:'600',
+              // textDecorationLine:'underline',
+              }}>
 
-          {/* Indústria: */}
-          <Text>Indústria:</Text>
-          <View style={{ marginBottom: 10 }}>
-            <Button title="Selecionar Indústrias" onPress={() => setVisible(true)} />
-            <Text>
-              {selectedIndustries.length > 0
-                ? `Indústrias Selecionadas: ${selectedIndustries.join(', ')}`
-                : 'Nenhuma indústria selecionada'}
+              Cadastro de novo usuário
             </Text>
-          </View>
+            <TextInputField control={control} name="email" placeholder="Email" errors={errors} />
+            <TextInputField control={control} name="password" placeholder="Senha" errors={errors} secureTextEntry />
+            <TextInputField control={control} name="name" placeholder="Nome" errors={errors} />
+            <TextInputField control={control} name="cnpj" placeholder="CNPJ" errors={errors} />
 
-          {/* Dialog de Indústria */}
-          <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-            <Dialog.Title>Selecione as Indústrias</Dialog.Title>
-            <Dialog.Content>
-              {industryOptions.map((option) => (
-                <View key={option.value} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                  <Checkbox
-                    status={selectedIndustries.includes(option.value) ? 'checked' : 'unchecked'}
-                    onPress={() => handleIndustrySelect(option.value)}
+            {/* Indústria: */}
+            <Text>Ramo:</Text>
+            <View style={{ marginBottom: 10 }}>
+              <Button color={'#2c5321'} title="Selecionar Ramos de atuação" onPress={() => setVisible(true)} />
+              <Text>
+                {selectedIndustries.length > 0
+                  ? `Ramos de atuação Selecionados: ${selectedIndustries.join(', ')}`
+                  : 'Nenhum ramo de atuação selecionado.'}
+              </Text>
+            </View>
+
+            {/* Dialog de Indústria */}
+            <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+              <Dialog.Title>Selecione as Indústrias</Dialog.Title>
+              <Dialog.Content>
+                {industryOptions.map((option) => (
+                  <View key={option.value} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <Checkbox
+                      status={selectedIndustries.includes(option.value) ? 'checked' : 'unchecked'}
+                      onPress={() => handleIndustrySelect(option.value)}
+                    />
+                    <Text>{option.label}</Text>
+                  </View>
+                ))}
+              </Dialog.Content>
+              <Dialog.Actions>
+                <PaperButton onPress={() => setVisible(false)}>Fechar</PaperButton>
+              </Dialog.Actions>
+            </Dialog>
+
+            {errors.industry && <Text style={{ color: 'red' }}>{errors.industry.message}</Text>}
+
+            {/* Endereço: */}
+            <Text>Endereço:</Text>
+            <TextInputField control={control} name="address.street" placeholder="Rua" errors={errors} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+              <Controller
+                control={control}
+                name="address.number"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Número"
+                    editable={!noNumber}
+                    style={{ flex: 1, borderWidth: 1, padding: 8, borderColor: errors?.address?.number ? 'red' : '#91A261', }}
                   />
-                  <Text>{option.label}</Text>
-                </View>
-              ))}
-            </Dialog.Content>
-            <Dialog.Actions>
-              <PaperButton onPress={() => setVisible(false)}>Fechar</PaperButton>
-            </Dialog.Actions>
-          </Dialog>
+                )}
+              />
+              <Switch value={noNumber} onValueChange={handleNoNumberToggle} thumbColor={noNumber ? '#2c5321' : '#ccc'} trackColor={{ false: '#ccc', true: '#a5d6a7' }} />
+              <Text style={{ marginLeft: 10 }}>Sem Número (S/N)</Text>
+            </View>
+            {errors.address?.number && <Text style={{ color: 'red' }}>{errors.address.number.message}</Text>}
 
-          {errors.industry && <Text style={{ color: 'red' }}>{errors.industry.message}</Text>}
-
-          {/* Endereço: */}
-          <Text>Endereço:</Text>
-          <TextInputField control={control} name="address.street" placeholder="Rua" errors={errors} />
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-            <Controller
-              control={control}
-              name="address.number"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Número"
-                  editable={!noNumber}
-                  style={{ flex: 1, borderWidth: 1, padding: 8 }}
-                />
-              )}
-            />
-            <Switch value={noNumber} onValueChange={handleNoNumberToggle} />
-            <Text style={{ marginLeft: 10 }}>Sem Número (S/N)</Text>
-          </View>
-          {errors.address?.number && <Text style={{ color: 'red' }}>{errors.address.number.message}</Text>}
-
-          <TextInputField control={control} name="address.neighborhood" placeholder="Bairro" errors={errors} />
-          <TextInputField control={control} name="address.cep" placeholder="CEP" errors={errors} />
-          <TextInputField
-            control={control}
-            name="address.googleMapsLink"
-            placeholder="Link do Google Maps"
-            errors={errors}
-          />
-
-          {/* Dados Bancários: */}
-          <Text>Dados Bancários:</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-            <Switch value={!hasBankDetails} onValueChange={() => setHasBankDetails((prev) => !prev)} />
-            <Text style={{ marginLeft: 10 }}>Não desejo/tenho informações bancárias</Text>
-          </View>
-          {['bank', 'agency', 'accountNumber', 'pixKey'].map((field) => (
+            <TextInputField control={control} name="address.neighborhood" placeholder="Bairro" errors={errors} />
+            <TextInputField control={control} name="address.cep" placeholder="CEP" errors={errors} />
             <TextInputField
-              key={field}
               control={control}
-              name={`bankDetails.${field}`}
-              placeholder={`Banco: ${field}`}
+              name="address.googleMapsLink"
+              placeholder="Link do Google Maps"
               errors={errors}
-              editable={hasBankDetails} // Desabilita edição se o checkbox estiver marcado
             />
-          ))}
 
-          {isSubmitting ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <Button title="Criar Conta" onPress={handleSubmit(handleCreateUser)} />
-          )}
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+            {/* Dados Bancários: */}
+            <Text>Dados Bancários:</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+              <Switch value={!hasBankDetails} onValueChange={() => setHasBankDetails((prev) => !prev)} thumbColor={!hasBankDetails ? '#2c5321' : '#ccc'} trackColor={{ false: '#ccc', true: '#a5d6a7' }}/>
+              <Text style={{ marginLeft: 10 }}>Não desejo/tenho informações bancárias</Text>
+            </View>
+            {hasBankDetails? (
+              ['Banco', 'Agencia', 'Número da Conta', 'Chave Pix'].map((field) => (
+                <TextInputField
+                  key={field}
+                  control={control}
+                  name={`bankDetails.${field}`}
+                  placeholder={`${field}`}
+                  errors={errors}
+                  editable={hasBankDetails} // Desabilita edição se o checkbox estiver marcado
+                />
+              ))
+            ): null
+            }
+
+            {isSubmitting ? (
+              <ActivityIndicator size="large" />
+            ) : (
+              <Button color={'#2c5321'} title="Criar Conta" onPress={handleSubmit(handleCreateUser)} />
+            )}
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </GradientBackground>
   );
 };
 
@@ -237,7 +259,7 @@ const TextInputField = ({ control, name, placeholder, secureTextEntry, errors })
           secureTextEntry={secureTextEntry}
           style={{
             borderWidth: 1,
-            borderColor: errors[name] ? 'red' : '#ccc',
+            borderColor: errors[name] ? 'red' : '#91A261',
             padding: 10,
             marginBottom: 5,
           }}

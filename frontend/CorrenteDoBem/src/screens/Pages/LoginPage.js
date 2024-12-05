@@ -103,7 +103,7 @@ const Login = ({ navigation, route }) => {
                     </Pressable>
                 )}
                 
-                <Pressable onPress={() => Alert.alert('Recuperação de senha')}>
+                <Pressable onPress={() => Alert.alert('Recuperação de senha', 'Um link foi enviado para seu e-mail de recuperação de senha.')}>
                     <Text style={styles.link}> Esqueceu a senha? </Text>
                 </Pressable>
             </View>
